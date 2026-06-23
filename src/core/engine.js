@@ -5,9 +5,11 @@ export class RetrofitEngine {
    * @param {Object} options
    * @param {Object} options.expectedSchema
    * @param {'heuristic'} [options.strategy='heuristic']
+   * @param {boolean} [options.silent=false]
    */
   constructor(options) {
     this.expectedSchema = options.expectedSchema;
+    this.silent = options.silent ?? false;
     this.strategy = this._resolveStrategy(options.strategy);
   }
 
@@ -21,12 +23,10 @@ export class RetrofitEngine {
 
   /**
    * @private
-   * @param {string} [strategyName]
-   * @returns {Object}
    */
   _resolveStrategy(strategyName) {
     const strategies = {
-      heuristic: new HeuristicStrategy()
+      heuristic: new HeuristicStrategy({ silent: this.silent })
     };
 
     return strategies[strategyName] ?? strategies.heuristic;

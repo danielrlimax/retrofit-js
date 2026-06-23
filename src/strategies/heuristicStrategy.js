@@ -1,10 +1,23 @@
 export class HeuristicStrategy {
   /**
-   * @param {Object} rawInput
-   * @param {Object} expectedSchema
-   * @returns {Object}
+   * @param {Object} options
+   * @param {boolean} [options.silent=false]
+   */
+  constructor(options = {}) {
+    this.silent = options.silent ?? false;
+  }
+
+  /**
+   * @param {*} rawInput
+   * @param {*} expectedSchema
+   * @returns {*}
    */
   correct(rawInput, expectedSchema) {
+    if (Array.isArray(rawInput)) {
+      const targetSchema = Array.isArray(expectedSchema) ? expectedSchema[0] : expectedSchema;
+      return rawInput.map(item => this.correct(item, targetSchema));
+    }
+
     if (!rawInput || typeof rawInput !== 'object') {
       return rawInput;
     }
@@ -13,18 +26,21 @@ export class HeuristicStrategy {
     const rawInputKeys = Object.keys(rawInput);
 
     for (const expectedKey of Object.keys(expectedSchema)) {
-      if (rawInput[expectedKey] !== undefined) {
-        correctedOutput[expectedKey] = rawInput[expectedKey];
+      const schemaDefinition = expectedSchema[expectedKey];
+      const exactValue = rawInput[expectedKey];
+
+      if (exactValue !== undefined) {
+        correctedOutput[expectedKey] = this._processValue(exactValue, schemaDefinition);
         continue;
       }
 
       const matchedKey = this._findApproximatedKey(expectedKey, rawInputKeys);
 
       if (matchedKey) {
-        correctedOutput[expectedKey] = rawInput[matchedKey];
-        console.warn(`[Retrofit.js] Auto-remapped key: "${matchedKey}" -> "${expectedKey}"`);
+        correctedOutput[expectedKey] = this._processValue(rawInput[matchedKey], schemaDefinition);
+        this._log(`Auto-remapped key: "${matchedKey}" -> "${expectedKey}"`);
       } else {
-        correctedOutput[expectedKey] = this._getDefaultValueForType(expectedSchema[expectedKey]);
+        correctedOutput[expectedKey] = this._getDefaultValueForType(schemaDefinition);
       }
     }
 
@@ -33,34 +49,36 @@ export class HeuristicStrategy {
 
   /**
    * @private
-   * @param {string} expectedKey
-   * @param {string[]} availableKeys
-   * @returns {string|undefined}
+   */
+  _processValue(value, schemaDefinition) {
+    if (typeof schemaDefinition === 'object' || Array.isArray(schemaDefinition)) {
+      return this.correct(value, schemaDefinition);
+    }
+    return value;
+  }
+
+  /**
+   * @private
    */
   _findApproximatedKey(expectedKey, availableKeys) {
     const normalizedExpected = this._normalizeString(expectedKey);
-    
     return availableKeys.find(key => this._normalizeString(key) === normalizedExpected);
   }
 
   /**
    * @private
-   * @param {string} value
-   * @returns {string}
    */
   _normalizeString(value) {
     return value.toLowerCase().replace(/[^a-z0-9]/g, '');
   }
 
-/**
+  /**
    * @private
-   * @param {string|Object} schemaTypeDefinition
-   * @returns {*}
    */
   _getDefaultValueForType(schemaTypeDefinition) {
-    if (typeof schemaTypeDefinition === 'object' || schemaTypeDefinition === 'object') {
-      return {};
-    }
+    if (Array.isArray(schemaTypeDefinition)) return [];
+    if (typeof schemaTypeDefinition === 'object') return {};
+    if (schemaTypeDefinition === 'object') return {};
     
     const defaultValues = {
       string: '',
@@ -69,5 +87,14 @@ export class HeuristicStrategy {
     };
 
     return defaultValues[schemaTypeDefinition] ?? null;
+  }
+
+  /**
+   * @private
+   */
+  _log(message) {
+    if (!this.silent) {
+      console.warn(`[Retrofit.js] ${message}`);
+    }
   }
 }
