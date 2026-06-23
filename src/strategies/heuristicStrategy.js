@@ -52,13 +52,15 @@ export class HeuristicStrategy {
     return value.toLowerCase().replace(/[^a-z0-9]/g, '');
   }
 
-  /**
+/**
    * @private
    * @param {string|Object} schemaTypeDefinition
    * @returns {*}
    */
   _getDefaultValueForType(schemaTypeDefinition) {
-    if (typeof schemaTypeDefinition === 'object') return {};
+    if (typeof schemaTypeDefinition === 'object' || schemaTypeDefinition === 'object') {
+      return {};
+    }
     
     const defaultValues = {
       string: '',
