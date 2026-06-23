@@ -1,5 +1,6 @@
 import { RetrofitEngine } from './core/engine.js';
 import { hookFetch } from './adapters/fetchAdapter.js';
+import { hookAxios } from './adapters/axiosAdapter.js';
 
 /**
  * @param {Object} options
@@ -15,4 +16,4 @@ export function createRetrofitClient(options) {
   };
 }
 
-export { hookFetch };
+export { hookFetch, hookAxios };
