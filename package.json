@@ -1,5 +1,5 @@
 {
-  "name": "retrofit-js",
+  "name": "@danielrlimax/retrofit-js",
   "version": "1.0.0",
   "description": "A lightweight, self-healing HTTP client wrapper that dynamically repairs API drift and schema mismatches.",
   "author": "Daniel de Lima <danielrlima@proton.me>",
