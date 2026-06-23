@@ -1,4 +1,4 @@
-import { RetrofitEngine } from '../core/engine.js';
+import { RetrofitEngine } from "../core/engine.js";
 
 /**
  * Attaches an interceptor to an Axios instance or global Axios object.
@@ -8,21 +8,21 @@ import { RetrofitEngine } from '../core/engine.js';
  * @param {'heuristic'} [options.strategy='heuristic']
  */
 export function hookAxios(axiosInstance, options) {
-  if (!axiosInstance || !axiosInstance.interceptors) {
-    return;
-  }
+	if (!axiosInstance || !axiosInstance.interceptors) {
+		return;
+	}
 
-  const engine = new RetrofitEngine(options);
+	const engine = new RetrofitEngine(options);
 
-  axiosInstance.interceptors.response.use(
-    (response) => {
-      if (response.data && typeof response.data === 'object') {
-        response.data = engine.sanitize(response.data);
-      }
-      return response;
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-  );
+	axiosInstance.interceptors.response.use(
+		(response) => {
+			if (response.data && typeof response.data === "object") {
+				response.data = engine.sanitize(response.data);
+			}
+			return response;
+		},
+		(error) => {
+			return Promise.reject(error);
+		},
+	);
 }

@@ -1,6 +1,6 @@
-import { RetrofitEngine } from './core/engine.js';
-import { hookFetch } from './adapters/fetchAdapter.js';
-import { hookAxios } from './adapters/axiosAdapter.js';
+import { hookAxios } from "./adapters/axiosAdapter.js";
+import { hookFetch } from "./adapters/fetchAdapter.js";
+import { RetrofitEngine } from "./core/engine.js";
 
 /**
  * @param {Object} options
@@ -9,11 +9,11 @@ import { hookAxios } from './adapters/axiosAdapter.js';
  * @returns {{ sanitize: (data: Object) => Object }}
  */
 export function createRetrofitClient(options) {
-  const engine = new RetrofitEngine(options);
+	const engine = new RetrofitEngine(options);
 
-  return {
-    sanitize: (data) => engine.sanitize(data)
-  };
+	return {
+		sanitize: (data) => engine.sanitize(data),
+	};
 }
 
 export { hookFetch, hookAxios };
