@@ -1,0 +1,20 @@
+{
+  "name": "retrofit-js",
+  "version": "1.0.0",
+  "description": "A self-healing HTTP client wrapper that dynamically fixes API drift and schema changes.",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "npx @biomejs/biome check src/",
+    "lint:fix": "npx @biomejs/biome check --write src/"
+  },
+  "keywords": ["api", "resilience", "fetch", "axios", "self-healing", "json"],
+  "author": "Seu Nome <seu.email@provedor.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
+    "vitest": "^2.0.0"
+  }
+}
