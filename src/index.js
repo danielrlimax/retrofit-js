@@ -1,4 +1,5 @@
 import { RetrofitEngine } from './core/engine.js';
+import { hookFetch } from './adapters/fetchAdapter.js';
 
 /**
  * @param {Object} options
@@ -13,3 +14,5 @@ export function createRetrofitClient(options) {
     sanitize: (data) => engine.sanitize(data)
   };
 }
+
+export { hookFetch };
