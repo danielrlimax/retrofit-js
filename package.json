@@ -1,20 +1,49 @@
 {
   "name": "retrofit-js",
   "version": "1.0.0",
-  "description": "A self-healing HTTP client wrapper that dynamically fixes API drift and schema changes.",
-  "main": "src/index.js",
+  "description": "A lightweight, self-healing HTTP client wrapper that dynamically repairs API drift and schema mismatches.",
+  "author": "Daniel de Lima <danielrlima@proton.me>",
+  "license": "MIT",
+  "keywords": [
+    "api",
+    "resilience",
+    "fetch",
+    "axios",
+    "self-healing",
+    "json",
+    "schema",
+    "interceptor"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielrlimax/retrofit-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/danielrlimax/retrofit-js/issues"
+  },
+  "homepage": "https://github.com/danielrlimax/retrofit-js#readme",
   "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "build": "tsup src/index.js --format cjs,esm --clean --dts",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "npx @biomejs/biome check src/",
     "lint:fix": "npx @biomejs/biome check --write src/"
   },
-  "keywords": ["api", "resilience", "fetch", "axios", "self-healing", "json"],
-  "author": "Seu Nome <seu.email@provedor.com>",
-  "license": "MIT",
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
+    "tsup": "^8.0.0",
     "vitest": "^2.0.0"
   }
 }
